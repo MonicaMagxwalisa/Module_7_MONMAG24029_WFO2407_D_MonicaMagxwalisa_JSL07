@@ -1,46 +1,48 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const cardForm = document.getElementById('cardForm');
-    const modal = document.getElementById('modal');
-    const certificateContent = document.getElementById('certificateContent');
-    const closeModal = document.querySelector('.close');
-  
-    // Hide the modal initially
-    modal.style.display = 'none';
-  
-    cardForm.addEventListener('submit', function (e) {
+document.addEventListener('DOMContentLoaded', () => {
+  const cardForm = document.getElementById('cardForm');
+  const modal = document.getElementById('modal');
+  const certificateContent = document.getElementById('certificateContent');
+  const closeModal = document.querySelector('.close');
+
+  modal.style.display = 'none';
+
+  cardForm.addEventListener('submit', (e) => {
       e.preventDefault();
-  
-      // 🚨 Get input values
-      const studentNameInput = document.getElementById('studentName');
-      const personalMessageInput = ;
-      const courseNameInput = ; 
-  
-      const studentName = studentNameInput.value;
-      const personalMessage = personalMessageInput.value;
-      const courseName = courseNameInput ? courseNameInput.value : "a course"; // Fallback to "a course" if no input
-  
-      if (studentName.trim() === '' || personalMessage.trim() === '') {
-        alert('Please fill in all fields');
-        return;
+
+      const studentName = document.getElementById('studentName').value.trim();
+      const personalMessage = document.getElementById('personalMessage').value.trim();
+      const courseName = document.getElementById('courseName') ? document.getElementById('courseName').value : "a course";
+
+      if (!studentName || !personalMessage) {
+          alert('Please fill in all fields');
+          return;
       }
-  
-      // 🚨 Generate certificate content dynamically
-      certificateContent. = `
-      <h3>${studentName}</h3>
-    `;
-    
-      //  Display the modal
+
+      const elements = [
+          { tag: 'h1', text: "Certificate of Achievement" },
+          { tag: 'p', text: "This is to certify that" },
+          { tag: 'h2', text: studentName },
+          { tag: 'p', text: "Has almost completed the" },
+          { tag: 'h3', text: courseName },
+          { tag: 'p', text: "With legendary perseverance and world-class bad-assery for never giving up 🏆" },
+          { tag: 'img', attrs: { src: "logo.png", height: 100, alt: "CodeSpace Logo" }},
+          { tag: 'p', text: personalMessage }
+      ];
+
+      certificateContent.innerHTML = ''; // Clear previous content
+
+      elements.forEach(el => {
+          const element = document.createElement(el.tag);
+          if (el.text) element.textContent = el.text;
+          if (el.attrs) Object.entries(el.attrs).forEach(([key, value]) => element.setAttribute(key, value));
+          certificateContent.appendChild(element);
+      });
+
       modal.style.display = 'block';
-  
-      // Clear the form inputs
-      studentNameInput.value = '';
-      personalMessageInput.value = '';
-      if(courseNameInput) courseNameInput.value = '';
-    });
-  
-    //  🚨 Close the modal when the close button is clicked
-    closeModal.('', function () {
-      
-    });
+      cardForm.reset(); // Clear form inputs
   });
-  
+
+  closeModal.addEventListener('click', () => {
+      modal.style.display = 'none';
+  });
+});
